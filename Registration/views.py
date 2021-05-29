@@ -13,9 +13,9 @@ def registration(request):
         user = User.objects.create_user(username=username,password=password, email=email)
         user.save()
         print('user created')
-        return redirect("/")
+        return redirect("/login")
     else:
-        return render(request,"registration.html")
+        return render(request,"LoginRegister/Register.html")
 
 
 def user_login(request):
@@ -31,4 +31,4 @@ def user_login(request):
             print("ufff yeh invalid integrity")
             return redirect("/login")
     else:
-        return render(request, "login.html")
+        return render(request, "LoginRegister/Login.html")
