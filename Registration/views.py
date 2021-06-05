@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User,auth
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import SESSION_KEY, authenticate, login
 
 
 # Create your views here.
 def registration(request):
+   
     if request.method == "POST":
         username = request.POST.get("username","")
         password = request.POST.get("password","")
@@ -19,6 +20,7 @@ def registration(request):
 
 
 def user_login(request):
+    session_id = request.session._get_or_create_session_key()
     if request.method == "POST":
         username = request.POST.get("username","")
         password = request.POST.get("password","")
@@ -26,9 +28,22 @@ def user_login(request):
 
         if user is not None:
             login(request, user)
+            request.session['name'] = user.get_username()
+            # request.session['id'] = session_id
+            # print("id : " + session_id)
             return redirect("/")
         else:
             print("ufff yeh invalid integrity")
             return redirect("/login")
     else:
         return render(request, "LoginRegister/Login.html")
+
+
+def Logout(request):
+    try:
+        del request.session['name']
+        return redirect('MainIndex:home')
+    except:
+      pass
+    return redirect('MainIndex:home')
+

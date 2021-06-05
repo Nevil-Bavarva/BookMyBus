@@ -32,7 +32,7 @@
 					<img src="{% static 'LoginRegister/images/img-01.png' %}" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form"  method="POST">
+				<form class="login100-form validate-form"  method="POST" action="{% url 'Registration:user_login' %}">
 					{% csrf_token %}
 					<span class="login100-form-title">
 						Member Login

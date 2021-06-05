@@ -2,5 +2,12 @@
 <title>Home</title>
 <body>
 <h1>Home Page</h1>
+    {% if name is not None %}
+    {{ name }}
+	<a class="dropdown-item" href="{% url 'Registration:Logout' %}" style="color:#00ACC1 ;" >Logout</a>
+    {% else  %}
+    <a href="{% url 'Registration:user_login' %}">login</a>
+    {% endif %}
+    
 </body>
 </html>
