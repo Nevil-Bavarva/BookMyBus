@@ -34,9 +34,9 @@ def findbus(request):
             return render(request, 'myapp/list.html',{'bus_list':bus_list})
         else:
             context["error"] = "Sorry no buses availiable"
-            return render(request, 'myapp/findbus.html', context)
+            return render(request, 'myapp/index.html', context)
     else:
-        return render(request, 'myapp/findbus.html')
+        return render(request, 'myapp/index.html')
 
 
 @login_required(login_url='signin')
@@ -47,7 +47,7 @@ def bookings(request):
         seats_r = int(request.POST.get('no_seats'))
         bus = Bus.objects.get(id=id_r)
         if bus:
-            if bus.rem > int(seats_r):
+            if bus.rem >= int(seats_r) and bus.rem !=0:
                 name_r = bus.bus_name
                 cost = int(seats_r) * bus.price
                 source_r = bus.source
@@ -69,7 +69,7 @@ def bookings(request):
                 # book.save()
                 return render(request, 'myapp/bookings.html', locals())
             else:
-                context["error"] = "Sorry select fewer number of seats"
+                context["error"] = "Sorry selected seats not available"
                 return render(request, 'myapp/findbus.html', context)
 
     else:
@@ -166,19 +166,26 @@ def update_seats(request):
         busid = request.POST.get('custId')
         bookid = request.POST.get('bookId')
         seats= request.POST.get('u_seats')
-        # remain = Bus.objects.filter(id=busid).values('rem')
+        bookedseats =  Book.objects.filter(id=bookid).values_list('nos', flat=True)[0]
         number = Bus.objects.filter(id=busid).values_list('rem', flat=True)[0]
         remaining= str(int(number))
         print('remain:')
         print(remaining)
         print('seats:')
-        print(seats < remaining)
-        if int(seats) < int(remaining) :
+        print(seats)
+        print('booked seats:')
+        print(bookedseats)
+        if int(seats) < int(bookedseats):
+            final = int(remaining) + int(int(bookedseats) - int(seats))
+        elif int(seats) > int(bookedseats):
+            final = int(remaining) - int(int(seats) - int(bookedseats))
+        print('final')
+        print(final)
+        if int(seats) < (int(remaining) + int(seats)) :
             Book.objects.filter(id=bookid).update(nos=seats)
+            Bus.objects.filter(id=busid).update(rem=final)
             return redirect('seebookings')
         else:
-            # context['error'] = "number of entered seats not available"
-            # return render(request, 'myapp/update_seats.html', {})
             book_ = Book.objects.filter(id=bookid)
             cost = Book.objects.filter(id=bookid).aggregate(total=Sum(F('nos') * F('price')))['total']
             if book_ is not None:

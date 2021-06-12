@@ -1,0 +1,72 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+{% load static %}
+
+	
+
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="{% static 'mysite/css/bootstrap.min.css' %}" />
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="{% static 'mysite/css/style.css' %}" />
+	<div id="booking" class="section">
+		<div class="section-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-7 col-md-push-5">
+						<div class="booking-cta">
+							<h1>Make your reservation</h1>
+							<p>
+									You can't get there by bus, only by hard work and risk and by not quite knowing what you're doing. What you'll discover will be wonderful. What you'll discover will be yourself.
+							</p>
+						</div>
+					</div>
+					<div class="col-md-4 col-md-pull-7">
+						<div class="booking-form">
+								<form action="{% url 'findbus' %}" method="post">
+										{% csrf_token %}
+								<div class="form-group">
+									<span class="form-label">Your Pickup </span>
+									<input class="form-control" type="text" placeholder="Enter a pickup point" name="source">
+								</div>
+								<div class="form-group">
+										<span class="form-label">Your Destination</span>
+										<input class="form-control" type="text" placeholder="Enter a destination" name="destination">
+									</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<span class="form-label">Trip Date</span>
+											<input class="form-control" type="date" name="date" required>
+										</div>
+									</div>
+									<div class="col-sm-6">
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-4">
+										
+									</div>
+									<div class="col-sm-4">
+										
+									</div>
+									<div class="col-sm-4">
+										
+									</div>
+								</div>
+								<div class="form-btn">
+									<button class="submit-btn">Check availability</button>
+								</div>
+							</form>
+							<span class="text-danger">{{error}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
