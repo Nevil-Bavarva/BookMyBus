@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from decimal import Decimal
+from django.db.models import Sum
+from django.db.models import F
 
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import User, Bus, Book
+from .models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import UserLoginForm, UserRegisterForm
@@ -146,6 +148,43 @@ def signin(request):
         context["error"] = "You are not logged in"
         return render(request, 'myapp/signin.html', context)
 
+
+@login_required(login_url='signin')
+def update(request):
+    book_id = request.POST.get('custId')
+    book_ = Book.objects.filter(id=book_id)
+    print("total-------------")
+    cost = Book.objects.filter(id=book_id).aggregate(total=Sum(F('nos') * F('price')))['total']
+    print(cost)
+    if book_ is not None:
+        return render(request,'myapp/update_seats.html', {'book_data':book_ , 'cost':cost})
+    return render(request,'myapp/update_seats.html')
+   
+def update_seats(request):
+    context ={}
+    if request.method == "POST":
+        busid = request.POST.get('custId')
+        bookid = request.POST.get('bookId')
+        seats= request.POST.get('u_seats')
+        # remain = Bus.objects.filter(id=busid).values('rem')
+        number = Bus.objects.filter(id=busid).values_list('rem', flat=True)[0]
+        remaining= str(int(number))
+        print('remain:')
+        print(remaining)
+        print('seats:')
+        print(seats < remaining)
+        if int(seats) < int(remaining) :
+            Book.objects.filter(id=bookid).update(nos=seats)
+            return redirect('seebookings')
+        else:
+            # context['error'] = "number of entered seats not available"
+            # return render(request, 'myapp/update_seats.html', {})
+            book_ = Book.objects.filter(id=bookid)
+            cost = Book.objects.filter(id=bookid).aggregate(total=Sum(F('nos') * F('price')))['total']
+            if book_ is not None:
+                return render(request,'myapp/update_seats.html', {'book_data':book_ , 'cost':cost, 'error':'number of entered seats not available'})
+            
+    return render(request , 'myapp/home.html')
 
 def signout(request):
     context = {}

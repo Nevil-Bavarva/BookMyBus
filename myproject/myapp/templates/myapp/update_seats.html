@@ -1,0 +1,48 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+<div class="container">
+{% for book in book_data %}
+<form action="{% url 'update_seats' %}" method="post" >
+        {% csrf_token %}
+        <input type="hidden" id="custId" name="custId" value="{{ book.busid }}">
+        <input type="hidden" id="bookId" name="bookId" value="{{ book.id }}">
+        <div class="form-group">
+          <label for="busname">Bus Name</label>
+          <input type="text" class="form-control" id="busname" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.bus_name}}" disabled>
+        </div>
+        <div class="form-group">
+                <label for="start">Bus Name</label>
+                <input type="text" class="form-control" id="start" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.source}}" disabled>
+        </div>
+        <div class="form-group">
+                <label for="dest">Bus Name</label>
+                <input type="text" class="form-control" id="dest" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.dest}}" disabled>
+        </div>
+        <div class="form-group">
+                <label for="seats">Bus Name</label>
+                <input type="number" class="form-control" id="seats" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.nos }}" name="u_seats" >
+                <span class="text-danger">{{error}}</span>
+        </div>
+        <div class="form-group">
+                <label for="price">Bus Name</label>
+                <input type="number" class="form-control" id="price" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.price }}"disabled >
+        </div>
+        <div class="form-group">
+                <label for="cost">Bus Name</label>
+                <input type="number" class="form-control" id="cost" aria-describedby="emailHelp" placeholder="Enter email" value="{{ cost }}.00" disabled>
+        </div>
+        <div class="form-group">
+                <label for="date">Bus Name</label>
+                <input type="text" class="form-control" id="date" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.date }}" disabled>
+        </div>
+        <div class="form-group">
+                <label for="Time">Bus Name</label>
+                <input type="text" class="form-control" id="time" aria-describedby="emailHelp" placeholder="Enter email" value="{{ book.time }}" disabled>
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endfor %}
+</div>
+
+{% endblock %}

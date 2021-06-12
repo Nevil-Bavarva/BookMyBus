@@ -46,6 +46,8 @@ class Book(models.Model):
     date = models.DateField()
     time = models.TimeField()
     status = models.CharField(choices=TICKET_STATUSES, default=BOOKED, max_length=2)
+    cost = models.PositiveIntegerField(blank=True, null=True)
+
 
     def __str__(self):
-        return self.email
+        return self.name

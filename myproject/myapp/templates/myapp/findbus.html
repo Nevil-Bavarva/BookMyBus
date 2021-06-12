@@ -5,7 +5,7 @@
             <div class="col-sm-6 mx-auto" style="margin-top: 70px">
                 <h2>Find bus</h2>
                 <form action="{% url 'findbus' %}" method="post">
-                    {% csrf_token %}
+                  {% csrf_token %}
                     <div class="form-group row">
                         <label for="example-email-input" class="col-2 col-form-label">Source</label>
                         <div class="col-10">
