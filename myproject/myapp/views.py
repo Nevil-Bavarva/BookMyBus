@@ -13,10 +13,16 @@ from .forms import UserLoginForm, UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 
-
+name =None
+user_id = None
 def home(request):
+    name = user_id = None
     if request.user.is_authenticated:
-        return render(request, 'myapp/home.html')
+        if request.session.has_key('name'):
+            if request.session.has_key('id'):
+                name = request.session['name']
+                user_id = request.session['id']
+                return render(request, 'myapp/home.html', {'name':name, 'user_id':user_id})
     else:
         return render(request, 'myapp/signin.html')
 
@@ -129,6 +135,7 @@ def signup(request):
 
 
 def signin(request):
+    session_id = request.session._get_or_create_session_key()
     context = {}
     if request.method == 'POST':
         name_r = request.POST.get('name')
@@ -136,10 +143,12 @@ def signin(request):
         user = authenticate(request, username=name_r, password=password_r)
         if user:
             login(request, user)
-            # username = request.session['username']
-            context["user"] = name_r
-            context["id"] = request.user.id
-            return render(request, 'myapp/success.html', context)
+            request.session['name'] = user.get_username()
+            request.session['id'] = request.user.id
+            # context["user"] = name_r
+            # context["id"] = request.user.id
+            # return render(request, 'myapp/success.html', context)
+            return render(request, 'myapp/success.html')
             # return HttpResponseRedirect('success')
         else:
             context["error"] = "Provide valid credentials"
@@ -196,6 +205,11 @@ def update_seats(request):
 def signout(request):
     context = {}
     logout(request)
+    try:
+        del request.session['name']
+        return redirect('signin')
+    except:
+      pass
     context['error'] = "You have been logged out"
     return render(request, 'myapp/signin.html', context)
 
