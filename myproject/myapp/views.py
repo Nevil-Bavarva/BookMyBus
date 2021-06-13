@@ -18,11 +18,13 @@ user_id = None
 def home(request):
     name = user_id = None
     if request.user.is_authenticated:
-        if request.session.has_key('name'):
-            if request.session.has_key('id'):
-                name = request.session['name']
-                user_id = request.session['id']
-                return render(request, 'myapp/home.html', {'name':name, 'user_id':user_id})
+        if request.session.has_key('name')  and request.session.has_key('id'):
+            name = request.session['name']
+            user_id = request.session['id']
+            return render(request, 'myapp/home.html', {'name':name, 'user_id':user_id})
+        else:
+            return render(request, 'myapp/signin.html' ,{'error':'something wrong occured, try signing again '})
+        return render(request, 'myapp/signin.html')
     else:
         return render(request, 'myapp/signin.html')
 
