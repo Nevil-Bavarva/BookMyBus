@@ -173,6 +173,7 @@ def update(request):
    
 def update_seats(request):
     context ={}
+    final = 0
     if request.method == "POST":
         busid = request.POST.get('custId')
         bookid = request.POST.get('bookId')
@@ -186,10 +187,18 @@ def update_seats(request):
         print(seats)
         print('booked seats:')
         print(bookedseats)
-        if int(seats) < int(bookedseats):
-            final = int(remaining) + int(int(bookedseats) - int(seats))
-        elif int(seats) > int(bookedseats):
-            final = int(remaining) - int(int(seats) - int(bookedseats))
+        if int(remaining) <= 0:
+            if int(seats) < int(bookedseats):
+                final = int(remaining) + int(int(bookedseats) - int(seats))
+        elif int(seats) == int(bookedseats):
+                final = int(remaining) 
+        else:
+            if int(seats) < int(bookedseats):
+                final = int(remaining) + int(int(bookedseats) - int(seats))
+            elif int(seats) > int(bookedseats):
+                final = int(remaining) - int(int(seats) - int(bookedseats))
+            
+            
         print('final')
         print(final)
         if int(seats) < (int(remaining) + int(seats)) :
