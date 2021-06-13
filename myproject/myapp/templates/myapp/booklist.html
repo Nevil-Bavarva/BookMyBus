@@ -45,6 +45,7 @@
     </tr>
     {% endfor %}
 </table>
+<div class="container">
 <form action="{% url 'cancellings' %}" method="post">
     <h3>Choose bus to book</h3>
     {% csrf_token %}

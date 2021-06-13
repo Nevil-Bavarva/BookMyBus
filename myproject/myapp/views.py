@@ -70,10 +70,10 @@ def bookings(request):
                 return render(request, 'myapp/bookings.html', locals())
             else:
                 context["error"] = "Sorry selected seats not available"
-                return render(request, 'myapp/findbus.html', context)
+                return render(request, 'myapp/index.html', context)
 
     else:
-        return render(request, 'myapp/findbus.html')
+        return render(request, 'myapp/index.html')
 
 
 @login_required(login_url='signin')
@@ -96,7 +96,7 @@ def cancellings(request):
             context["error"] = "Sorry You have not booked that bus"
             return render(request, 'myapp/error.html', context)
     else:
-        return render(request, 'myapp/findbus.html')
+        return render(request, 'myapp/index.html')
 
 
 @login_required(login_url='signin')
@@ -108,7 +108,7 @@ def seebookings(request,new={}):
         return render(request, 'myapp/booklist.html', locals())
     else:
         context["error"] = "Sorry no buses booked"
-        return render(request, 'myapp/findbus.html', context)
+        return render(request, 'myapp/index.html', context)
 
 
 def signup(request):

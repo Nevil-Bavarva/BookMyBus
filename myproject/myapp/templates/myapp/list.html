@@ -37,18 +37,17 @@
     {% csrf_token %}
     <div class="col-auto">
         <label for="example-email-input" class="col-2 col-form-label">Bus Name</label>
-    <select name="cars" id="cars">
-        {% for a_name in bus_list %}
+    <select class="custom-select" 
+    style="width:250px;" name="cars" id="cars">
+    {% for a_name in bus_list %}
       <option value="{{ a_name.id }}">{{ a_name.id }}  - {{ a_name.bus_name }}</option>
       {% endfor %}
-    </select>
+</select>
     </div>
-    <div class="col=auto">
-        <label for="example-email-input" class="col-2 col-form-label">Number of seats</label>
-        <div class="col-5">
-            <input name='no_seats' class="form-control" type="number">
+    <div class="col-auto">
+            <label for="example-email-input" class="col-2 col-form-label">Seats</label>
+        <input type="text" class="custom-select" style="width:100px" name="no_seats">
         </div>
-    </div>
     <br>
     <br>
     <div class="pull-right">
