@@ -15,7 +15,7 @@ class Bus(models.Model):
     time = models.TimeField()
 
     def __str__(self):
-        return self.bus_name
+        return self.bus_name  + ' (' + self.source + ' - ' + self.dest + ' : ' + str(self.date) + ')'
 
 
 
