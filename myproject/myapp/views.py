@@ -18,7 +18,7 @@ user_id = None
 def home(request):
     name = user_id = None
     if request.user.is_authenticated:
-        if request.session.has_key('name')  and request.session.has_key('id'):
+        if request.session.has_key('name'):
             name = request.session['name']
             user_id = request.session['id']
             return render(request, 'myapp/home.html', {'name':name, 'user_id':user_id})
@@ -120,6 +120,7 @@ def seebookings(request,new={}):
 
 
 def signup(request):
+    session_id = request.session._get_or_create_session_key()
     context = {}
     if request.method == 'POST':
         name_r = request.POST.get('name')
@@ -128,6 +129,8 @@ def signup(request):
         user = User.objects.create_user(name_r, email_r, password_r, )
         if user:
             login(request, user)
+            request.session['name'] = name_r
+            request.session['id'] = request.user.id
             return render(request, 'myapp/thank.html')
         else:
             context["error"] = "Provide valid credentials"
@@ -145,7 +148,7 @@ def signin(request):
         user = authenticate(request, username=name_r, password=password_r)
         if user:
             login(request, user)
-            request.session['name'] = user.get_username()
+            request.session['name'] = name_r
             request.session['id'] = request.user.id
             # context["user"] = name_r
             # context["id"] = request.user.id

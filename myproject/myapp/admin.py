@@ -5,5 +5,3 @@ from .models import *
 
 admin.site.register(Bus)
 admin.site.register(Book)
-
-
