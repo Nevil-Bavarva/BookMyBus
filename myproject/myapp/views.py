@@ -33,8 +33,8 @@ def home(request):
 def findbus(request):
     context = {}
     if request.method == 'POST':
-        source_r = request.POST.get('source')
-        dest_r = request.POST.get('destination')
+        source_r = request.POST.get('source').title()
+        dest_r = request.POST.get('destination').title()
         date_r = request.POST.get('date')
         bus_list = Bus.objects.filter(source=source_r, dest=dest_r, date=date_r)
         bus_name = Bus.objects.filter(source=source_r, dest=dest_r, date=date_r).values('bus_name')
